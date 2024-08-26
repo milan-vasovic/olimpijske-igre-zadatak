@@ -1,0 +1,20 @@
+{
+  "name": "olimpijske-igre-zadatak",
+  "version": "1.0.0",
+  "description": "zadatak za praksu",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milan-vasovic/olimpijske-igre-zadatak.git"
+  },
+  "author": "Milan Vasovic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milan-vasovic/olimpijske-igre-zadatak/issues"
+  },
+  "homepage": "https://github.com/milan-vasovic/olimpijske-igre-zadatak#readme"
+}
