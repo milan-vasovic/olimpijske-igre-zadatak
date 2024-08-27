@@ -20,6 +20,7 @@ class Team {
             count: 0,
             matches: []
         };
+        this.drawRank = null;
     }
 
     getInfo() {
@@ -46,12 +47,44 @@ class Team {
                 matches: this.losses.matches
             },
             points: this.points,
-            groupRank: this.groupRank
+            groupRank: this.groupRank,
+            drawRank: this.drawRank
         }
 
-        console.log(JSON.stringify(stats, null, 2));
-
         return stats;
+    }
+
+    getFinalTeamStats() {
+        let pointAllowed = 0;
+        let pointsScored = 0;
+        let difference = 0;
+        this.wins.matches.forEach(metch => {
+            let leftValue = +metch.result.split("-")[0];
+            let rightValue = +metch.result.split("-")[1];
+            pointsScored += leftValue;
+            pointAllowed += rightValue;
+            difference += +metch.difference;
+        })
+
+        this.losses.matches.forEach(metch => {
+            let leftValue = +metch.result.split("-")[0];
+            let rightValue = +metch.result.split("-")[1];
+            pointsScored += leftValue;
+            pointAllowed += rightValue;
+            difference += +metch.difference;
+        })
+
+        let result = {
+            name: this.name,
+            wins: this.wins.count,
+            losses: this.losses.count,
+            points: this.points,
+            pointsScored: pointsScored,
+            pointAllowed: pointAllowed,
+            difference: difference
+        };
+
+        return result;
     }
 
     playWithRest(teams) {
@@ -59,13 +92,9 @@ class Team {
 
         teams.forEach(team => {
             const result = this.startMatch(team);
-            results.push("Winner: " + result);
+            results.push(result);
         })
 
-        console.log("--------------------------------------------------------")
-        console.log("Result of metches: ");
-        results.forEach(i => console.log(i));
-        console.log('\n');
         return results;
     }
 
@@ -73,20 +102,20 @@ class Team {
         this.wins.count += 1;
         this.wins.matches.push({
             opponent: data.name,
-            result: data.result
+            result: data.result,
+            difference: data.difference
         })
         this.points += 3
-        console.log("Win result saved!");
     }
 
     setLosseResult(data) {
         this.losses.count += 1;
         this.losses.matches.push({
             opponent: data.name,
-            result: data.result
+            result: data.result,
+            difference: data.difference
         })
         this.points += 1
-        console.log("Losse result saved!");
     }
 
     setGroupRank(num) {
@@ -97,8 +126,7 @@ class Team {
         const rank = this.rank;
         const enemyTeam = team.getInfo();
         
-        console.log("--------------------------------------------------------")
-        console.log(`${this.name} (${this.code}) VS ${enemyTeam.name} (${enemyTeam.code})`)
+        // console.log("\n")
 
         let strongerTeamRank, strongerTeamName, weakerTeamRank, weakerTeamName;
 
@@ -115,17 +143,16 @@ class Team {
             weakerTeamName = this.name;
         }
 
-        console.log(`Stronger team: ${strongerTeamName} | ${strongerTeamRank}`);
-        console.log(`Weaker team: ${weakerTeamName} | ${weakerTeamRank}`);
+        // console.log(`Stronger team: ${strongerTeamName} | ${strongerTeamRank}`);
+        // console.log(`Weaker team: ${weakerTeamName} | ${weakerTeamRank}`);
 
         const probabilityToWin = calculateWinProbability(weakerTeamRank, strongerTeamRank);
         const random = Math.random();
 
-        console.log("Probability to win: " + probabilityToWin);
-        console.log("Random: " + random);
+        // console.log("Probability to win: " + probabilityToWin);
+        // console.log("Random: " + random);
 
-        const result = random < probabilityToWin ? this.name : enemyTeam.name
-        console.log(result);
+        let result = random < probabilityToWin ? this.name : enemyTeam.name;
 
         let winScore, losseScor;
 
@@ -148,30 +175,37 @@ class Team {
         if (result.toString() === this.name.toString()) {
             const dataForWin = {
                 name: enemyTeam.name,
-                result: `${winScore}-${losseScor}`
+                result: `${winScore}-${losseScor}`,
+                difference: winScore - losseScor
             }
             this.setWinResult(dataForWin);
 
             const dataForLosse = {
                 name: this.name,
-                result: `${losseScor}-${winScore}`
+                result: `${losseScor}-${winScore}`,
+                difference: losseScor - winScore
             }
             team.setLosseResult(dataForLosse);
         } else {
             const dataForLosse = {
                 name: enemyTeam.name,
-                result: `${losseScor}-${winScore}`
+                result: `${losseScor}-${winScore}`,
+                difference: losseScor - winScore
             }
             this.setLosseResult(dataForLosse);
 
             const dataForWin = {
                 name: this.name,
-                result: `${winScore}-${losseScor}`
+                result: `${winScore}-${losseScor}`,
+                difference: winScore - losseScor
             }
             team.setWinResult(dataForWin);
         }
 
-        return result;
+        console.log(`${this.name} (${this.code}) VS ${enemyTeam.name} (${enemyTeam.code})`)
+        let newResult = `Winner: ${result} (${winScore} : ${losseScor})`;
+        console.log(newResult);
+        return newResult;
     }
 }
 
@@ -182,6 +216,7 @@ class Group {
         this.firstPlaced = null;
         this.secondPlaced = null;
         this.thirdPlaced = null;
+        this.fourthPlaced = null;
     }
 
     getTeams() {
@@ -196,16 +231,42 @@ class Group {
         return `Name: ${this.name}, teams: ${this.getTeams()}`;
     }
 
+    getFinalGroupStats() {
+        const results = [];
+
+        let output  = `Group ${this.name}: Name / Wins / Losses / Points Scored / Points Allowed / Difference`;
+        this.teams.forEach((team, index) => {
+            const stat = team.getFinalTeamStats();
+            results.push(stat);
+            output += `\n${index + 1}. ${stat.name}   ${stat.wins} / ${stat.losses} / ${stat.points} / ${stat.pointsScored} / ${stat.pointAllowed} / ${stat.difference}`;
+        })
+        console.log(output);
+        return results;
+    }
+
+    getPlaces() {
+        const data = {
+            first: this.firstPlaced,
+            second: this.secondPlaced,
+            third: this.thirdPlaced,
+            fourth: this.fourthPlaced
+        }
+
+        return data;
+    }
+
     startMatches() {
-        console.log('\n')
-        console.log("============================================");
+        console.log("\n")
+        console.log("========================================================");
         console.log("Group: " + this.name + " has stated!");
         const teams = [...this.teams];
         const results = [];
 
         while (teams.length > 1) {
             const chosenTeam = teams[0];
+            console.log("\n")
             console.log("Team: " + chosenTeam.name + " Playing!");
+            console.log("--------------------------------------------------------")
             teams.shift();
             const result = chosenTeam.playWithRest(teams);
             results.push(result);
@@ -214,7 +275,67 @@ class Group {
         return results;
     }
 
+    setScoresToTeams() {
+        this.teams.sort((a, b) => b.points - a.points);
+    
+        const teamStats = this.getTeamsStats();
+    
+        for (let i = 0; i < teamStats.length; i++) {
+            teamStats[i].groupRank = i + 1;
+    
+            if (i + 1 < teamStats.length) {
+                if (teamStats[i].points === teamStats[i + 1].points) {
+                    const currentTeam = teamStats[i];
+                    const nextTeam = teamStats[i + 1];
+    
+                    // Check if current team has won against the next team
+                    const currentTeamWon = currentTeam.wins.matches.some(match => match.opponent === nextTeam.name);
+                    const nextTeamWon = nextTeam.wins.matches.some(match => match.opponent === currentTeam.name);
+    
+                    if (currentTeamWon && !nextTeamWon) {
+                        // current team wins, keep ranking as is
+                        nextTeam.groupRank = i + 2;
+                    } else if (!currentTeamWon && nextTeamWon) {
+                        // next team wins, swap ranks
+                        currentTeam.groupRank = i + 2;
+                        nextTeam.groupRank = i + 1;
+                        // swap positions in the array
+                        [teamStats[i], teamStats[i + 1]] = [teamStats[i + 1], teamStats[i]];
+                    }
+                }
+            }
+        }
+    
+        this.firstPlaced = teamStats[0];
+        this.secondPlaced = teamStats[1];
+        this.thirdPlaced = teamStats[2];
+        this.fourthPlaced = teamStats[3];
+    }
+}
 
+class Draw {
+    constructor(groups, groupResults) {
+        this.groups = [...groups];
+        this.groupResults = [...groupResults];
+        this.drawD = null;
+        this.drawE = null;
+        this.drawF = null;
+        this.drawG = null;
+    }
+
+    creatDraw() {
+        let firstPlacedTeams = groups.map(group => group.firstPlaced);
+        let secondPlacedTeams = groups.map(group => group.secondPlaced);
+        let thirdPlacedTeams = groups.map(group => group.thirdPlaced);
+
+        firstPlacedTeams.sort((a, b) => b.points - a.points);
+        secondPlacedTeams.sort((a, b) => b.points - a.points);
+        thirdPlacedTeams.sort((a, b) => b.points - a.points);
+
+        // console.log(firstPlacedTeams);
+        // console.log(secondPlacedTeams);
+        // console.log(thirdPlacedTeams);
+    }
 }
 
 // ____________________________________________________________Global variables______________________________________________________________
@@ -253,7 +374,6 @@ function getExibitions() {
 
         try {
             const jsonData = JSON.parse(data);
-            console.log(jsonData);
         } catch (err) {
             console.log("Unable to parse JSON " + err);
         }
@@ -262,7 +382,6 @@ function getExibitions() {
 
 function calculateWinProbability(weakerRank, strongerRank, base = 400) {
     const difference = weakerRank - strongerRank;
-    console.log(`difference: ${difference}`);
     return  1 / (1 + Math.pow(10, difference / base));
 }
 
@@ -271,15 +390,29 @@ function getRandomScoreNumber(min, max) {
 }
 
 async function start() {
+    const groupResults = [];
+
     await getTeams();
 
     // console.log(groups.length);
 
     groups.forEach(group => {
-        console.log("start");
         group.startMatches();
-        group.getTeamsStats();
+        // group.getTeamsStats();
+        group.setScoresToTeams();
     })
+
+    groups.forEach(g => {
+        // console.log(g.getPlaces());
+        console.log('\n');
+        groupResults.push(g.getFinalGroupStats());
+    })
+
+    console.log('\n');
+
+    const draws = new Draw(groups, groupResults);
+
+    draws.creatDraw();
 }
 // ____________________________________________________________________Function calling________________________________________________________________
 
