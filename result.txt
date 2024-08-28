@@ -1,0 +1,141 @@
+========================================================
+Group: A has stated!
+
+
+Team: Kanada Playing!
+--------------------------------------------------------
+Kanada (CAN) VS Australija (AUS)
+Winner: Kanada (49 : 21)
+Kanada (CAN) VS Grčka (GRE)
+Winner: Kanada (113 : 30)
+Kanada (CAN) VS Španija (ESP)
+Winner: Kanada (95 : 31)
+
+
+Team: Australija Playing!
+--------------------------------------------------------
+Australija (AUS) VS Grčka (GRE)
+Winner: Grčka (103 : 88)
+Australija (AUS) VS Španija (ESP)
+Winner: Australija (83 : 57)
+
+
+Team: Grčka Playing!
+--------------------------------------------------------
+Grčka (GRE) VS Španija (ESP)
+Winner: Španija (9 : 1)
+
+
+========================================================
+Group: B has stated!
+
+
+Team: Nemačka Playing!
+--------------------------------------------------------
+Nemačka (GER) VS Francuska (FRA)
+Winner: Francuska (116 : 59)
+Nemačka (GER) VS Brazil (BRA)
+Winner: Brazil (84 : 68)
+Nemačka (GER) VS Japan (JPN)
+Winner: Nemačka (65 : 25)
+
+
+Team: Francuska Playing!
+--------------------------------------------------------
+Francuska (FRA) VS Brazil (BRA)
+Winner: Francuska (71 : 59)
+Francuska (FRA) VS Japan (JPN)
+Winner: Francuska (117 : 25)
+
+
+Team: Brazil Playing!
+--------------------------------------------------------
+Brazil (BRA) VS Japan (JPN)
+Winner: Japan (74 : 7)
+
+
+========================================================
+Group: C has stated!
+
+
+Team: Sjedinjene Države Playing!
+--------------------------------------------------------
+Sjedinjene Države (USA) VS Srbija (SRB)
+Winner: Sjedinjene Države (93 : 52)
+Sjedinjene Države (USA) VS Južni Sudan (SSD)
+Winner: Južni Sudan (57 : 4)
+Sjedinjene Države (USA) VS Puerto Riko (PRI)
+Winner: Puerto Riko (48 : 37)
+
+
+Team: Srbija Playing!
+--------------------------------------------------------
+Srbija (SRB) VS Južni Sudan (SSD)
+Winner: Srbija (43 : 27)
+Srbija (SRB) VS Puerto Riko (PRI)
+Winner: Puerto Riko (56 : 18)
+
+
+Team: Južni Sudan Playing!
+--------------------------------------------------------
+Južni Sudan (SSD) VS Puerto Riko (PRI)
+Winner: Puerto Riko (85 : 12)
+
+
+Group A: Name / Wins / Losses / Points Scored / Points Allowed / Difference
+1. Kanada   3 / 0 / 9 / 257 / 82 / 175
+2. Australija   1 / 2 / 5 / 192 / 209 / -17
+3. Grčka   1 / 2 / 5 / 134 / 210 / -76
+4. Španija   1 / 2 / 5 / 97 / 179 / -82
+
+
+Group B: Name / Wins / Losses / Points Scored / Points Allowed / Difference
+1. Francuska   3 / 0 / 9 / 304 / 143 / 161
+2. Nemačka   1 / 2 / 5 / 192 / 225 / -33
+3. Brazil   1 / 2 / 5 / 150 / 213 / -63
+4. Japan   1 / 2 / 5 / 124 / 189 / -65
+
+
+Group C: Name / Wins / Losses / Points Scored / Points Allowed / Difference
+1. Puerto Riko   3 / 0 / 9 / 189 / 67 / 122
+2. Sjedinjene Države   1 / 2 / 5 / 134 / 157 / -23
+3. Srbija   1 / 2 / 5 / 113 / 176 / -63
+4. Južni Sudan   1 / 2 / 5 / 96 / 132 / -36
+
+
+Quaterfinals Matches:
+Kanada (CAN) VS Nemačka (GER)
+Winner: Nemačka (89 : 8)
+--------------------------------------------------------
+Francuska (FRA) VS Sjedinjene Države (USA)
+Winner: Francuska (58 : 36)
+--------------------------------------------------------
+Brazil (BRA) VS Grčka (GRE)
+Winner: Brazil (99 : 7)
+--------------------------------------------------------
+Puerto Riko (PRI) VS Australija (AUS)
+Winner: Puerto Riko (92 : 89)
+--------------------------------------------------------
+
+
+Semifinal Matches:
+Nemačka (GER) VS Puerto Riko (PRI)
+Winner: Nemačka (89 : 72)
+--------------------------------------------------------
+Francuska (FRA) VS Brazil (BRA)
+Winner: Francuska (92 : 30)
+
+
+Match for third place:
+Nemačka (GER) VS Francuska (FRA)
+Winner: Francuska (111 : 10)
+
+
+Final Match:
+Puerto Riko (PRI) VS Brazil (BRA)
+Winner: Puerto Riko (61 : 25)
+
+Medals:
+1. Gold - Puerto Riko (PRI)
+2. Silver - Brazil (BRA)
+3. Bronze - Francuska (FRA)
