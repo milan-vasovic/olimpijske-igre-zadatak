@@ -63,20 +63,20 @@ class Team {
         let difference = 0;
 
          // Calculate totals for wins and losses
-        this.wins.matches.forEach(metch => {
-            let leftValue = +metch.result.split("-")[0];
-            let rightValue = +metch.result.split("-")[1];
+        this.wins.matches.forEach(match => {
+            let leftValue = +match.result.split("-")[0];
+            let rightValue = +match.result.split("-")[1];
             pointsScored += leftValue;
             pointAllowed += rightValue;
-            difference += +metch.difference;
+            difference += +match.difference;
         })
 
-        this.losses.matches.forEach(metch => {
-            let leftValue = +metch.result.split("-")[0];
-            let rightValue = +metch.result.split("-")[1];
+        this.losses.matches.forEach(match => {
+            let leftValue = +match.result.split("-")[0];
+            let rightValue = +match.result.split("-")[1];
             pointsScored += leftValue;
             pointAllowed += rightValue;
-            difference += +metch.difference;
+            difference += +match.difference;
         })
 
         let result = {
@@ -116,7 +116,7 @@ class Team {
     }
 
     // Set results after a loss
-    setLosseResult(data) {
+    setLossResult(data) {
         this.losses.count += 1;
         this.losses.matches.push({
             opponent: data.name,
@@ -136,43 +136,39 @@ class Team {
         const rank = this.rank;
         const enemyTeam = team.getInfo();
 
-        let strongerTeamRank, strongerTeamName, weakerTeamRank, weakerTeamName;
+        let strongerTeamRank, weakerTeamRank;
 
         // If enemyTeam.rank is greater then this team rank it means that this team is stronger and vice versa
         if (rank < enemyTeam.rank) {
             strongerTeamRank = rank;
-            strongerTeamName = this.name;
             weakerTeamRank = enemyTeam.rank;
-            weakerTeamName = enemyTeam.name;
         } else {
             strongerTeamRank = enemyTeam.rank;
-            strongerTeamName = enemyTeam.name;
             weakerTeamRank = rank;
-            weakerTeamName = this.name;
         }
 
-        // Creat probbabilty for win and random number to compare
+        // create probbabilty for win and random number to compare
         const probabilityToWin = calculateWinProbability(weakerTeamRank, strongerTeamRank);
         const random = Math.random();
 
         let result = random < probabilityToWin ? this.name : enemyTeam.name;
 
-        let winScore, losseScor;
+        let winScore, lossScor;
 
-        // Creat random dummy scores and set them accordingly
+        // create random dummy scores and set them accordingly
         const firstScore = getRandomScoreNumber(0, 120);
         const secondScore = getRandomScoreNumber(0, 120);
 
         if (firstScore > secondScore) {
             winScore = firstScore;
-            losseScor = secondScore;
+            lossScor = secondScore;
         } else {
             if (firstScore == secondScore) {
                 winScore = secondScore;
-                losseScor = firstScore-1;
+                lossScor = firstScore-1;
             } else {
                 winScore = secondScore;
-                losseScor = firstScore;
+                lossScor = firstScore;
             }
         }
 
@@ -180,36 +176,36 @@ class Team {
         if (result.toString() === this.name.toString()) {
             const dataForWin = {
                 name: enemyTeam.name,
-                result: `${winScore}-${losseScor}`,
-                difference: winScore - losseScor
+                result: `${winScore}-${lossScor}`,
+                difference: winScore - lossScor
             }
             this.setWinResult(dataForWin);
 
-            const dataForLosse = {
+            const dataForLoss = {
                 name: this.name,
-                result: `${losseScor}-${winScore}`,
-                difference: losseScor - winScore
+                result: `${lossScor}-${winScore}`,
+                difference: lossScor - winScore
             }
-            team.setLosseResult(dataForLosse);
+            team.setLossResult(dataForLoss);
         } else {
-            const dataForLosse = {
+            const dataForLoss = {
                 name: enemyTeam.name,
-                result: `${losseScor}-${winScore}`,
-                difference: losseScor - winScore
+                result: `${lossScor}-${winScore}`,
+                difference: lossScor - winScore
             }
-            this.setLosseResult(dataForLosse);
+            this.setLossResult(dataForLoss);
 
             const dataForWin = {
                 name: this.name,
-                result: `${winScore}-${losseScor}`,
-                difference: winScore - losseScor
+                result: `${winScore}-${lossScor}`,
+                difference: winScore - lossScor
             }
             team.setWinResult(dataForWin);
         }
 
-        console.log(`${this.name} (${this.code}) VS ${enemyTeam.name} (${enemyTeam.code})`)
-        let newResult = `Winner: ${result} (${winScore} : ${losseScor})`;
-        console.log(newResult);
+        printToConsole(`${this.name} (${this.code}) VS ${enemyTeam.name} (${enemyTeam.code})`);
+        let newResult = `Winner: ${result} (${winScore} : ${lossScor})`;
+        printToConsole(newResult);
         return result;
     }
 }
@@ -235,11 +231,6 @@ class Group {
         return this.teams.map(team => team.getStats());
     }
 
-    // Returns the group's name and a list of teams
-    getInfo() {
-        return `Name: ${this.name}, teams: ${this.getTeams()}`;
-    }
-
     // Calculates and logs the final statistics for the group
     getFinalGroupStats() {
         const results = [];
@@ -250,7 +241,7 @@ class Group {
             results.push(stat);
             output += `\n${index + 1}. ${stat.name}   ${stat.wins} / ${stat.losses} / ${stat.points} / ${stat.pointsScored} / ${stat.pointAllowed} / ${stat.difference}`;
         })
-        console.log(output);
+        printToConsole(output);
         return results;
     }
 
@@ -268,17 +259,14 @@ class Group {
 
     // Starts the matches within the group, where each team plays against the others
     startMatches() {
-        console.log("\n")
-        console.log("========================================================");
-        console.log("Group: " + this.name + " has stated!");
+        printToConsole("Group: " + this.name + " has stated!", 1, 0, 1);
         const teams = [...this.teams];
         const results = [];
 
         while (teams.length > 1) {
             const chosenTeam = teams[0];
-            console.log("\n")
-            console.log("Team: " + chosenTeam.name + " Playing!");
-            console.log("--------------------------------------------------------")
+            printToConsole("Team: " + chosenTeam.name + " Playing!", 1);
+            printToConsole(0, 0, 1);
             teams.shift();
             const result = chosenTeam.playWithRest(teams);
             results.push(result);
@@ -346,8 +334,8 @@ class Draw {
         this.thirdPlaced = null;
     }
 
-    // Create the initial draw based on team placements from group stages
-    creatDraw() {
+    // create the initial draw based on team placements from group stages
+    createDraw() {
         let firstPlacedTeams = groups.map(group => group.firstPlaced);
         let secondPlacedTeams = groups.map(group => group.secondPlaced);
         let thirdPlacedTeams = groups.map(group => group.thirdPlaced);
@@ -361,11 +349,6 @@ class Draw {
         this.drawE = [allTeams[2], allTeams[3]];
         this.drawF = [allTeams[4], allTeams[5]];
         this.drawG = [allTeams[6], allTeams[7]];
-    }
-
-    // Log the current draw information
-    getInfo() {
-        console.log(`\n${this.drawD}\n${this.drawE}\n${this.drawF}\n${this.drawG}`);
     }
 
     // Randomly select teams by given rules to determine the quarterfinal, semifinal, third place and final matchups
@@ -391,12 +374,12 @@ class Draw {
         }
 
         // Process quarterfinal matches and determine teams for semifinals
-        console.log("Quaterfinals Matches:")
+        printToConsole("Quarterfinals Matches:")
         this.quarterfinal.forEach(group => {
             const selectedTeam = teams.find(team => team.name === group[0].name);
             const enemyTeam = teams.find(team => team.name === group[1].name)
             const result = selectedTeam.startMatch(enemyTeam);
-            console.log('--------------------------------------------------------');
+            printToConsole(0, 0, 1);
             if (result.toString() === selectedTeam.name.toString()) {
                 this.semifinal.push(selectedTeam);
             } else {
@@ -410,15 +393,13 @@ class Draw {
         const secondSemifinalTeam1 = this.semifinal[1];
         const secondSemifinalTeam2 = this.semifinal[2];
 
-        console.log('\n');
-        console.log("Semifinal Matches:")
-        const reslutFirstSemifinal = firstSemifinalTeam1.startMatch(firstSemifinalTeam2);
-        console.log('--------------------------------------------------------');
-        const reslutSecondSemifinal = secondSemifinalTeam1.startMatch(secondSemifinalTeam2);
-        console.log('\n');
+        printToConsole("Semifinal Matches:", 1)
+        const resultFirstSemifinal = firstSemifinalTeam1.startMatch(firstSemifinalTeam2);
+        printToConsole(0, 0, 1);
+        const resultSecondSemifinal = secondSemifinalTeam1.startMatch(secondSemifinalTeam2);
 
         // Determine third place contenders and final match results
-        if (reslutFirstSemifinal.toString() === firstSemifinalTeam1.toString()) {
+        if (resultFirstSemifinal.toString() === firstSemifinalTeam1.toString()) {
             this.final.push(firstSemifinalTeam1);
             this.teamsForThirdPlace.push(firstSemifinalTeam2);
         } else {
@@ -426,7 +407,7 @@ class Draw {
             this.teamsForThirdPlace.push(firstSemifinalTeam1);
         }
 
-        if (reslutSecondSemifinal.toString() === secondSemifinalTeam1.toString()) {
+        if (resultSecondSemifinal.toString() === secondSemifinalTeam1.toString()) {
             this.final.push(secondSemifinalTeam1);
             this.teamsForThirdPlace.push(secondSemifinalTeam2);
         } else {
@@ -435,9 +416,8 @@ class Draw {
         }
 
         // Process third place match
-        console.log('Match for third place:');
+        printToConsole('Match for third place:', 1);
         const resultForThirdPlace = this.teamsForThirdPlace[0].startMatch(this.teamsForThirdPlace[1]);
-        console.log('\n');
 
         if (resultForThirdPlace.toString() === this.teamsForThirdPlace[0].name) {
             this.thirdPlaced = this.teamsForThirdPlace[0];
@@ -446,7 +426,7 @@ class Draw {
         }
 
         // Process final match and determine the winners
-        console.log('Final Match:');
+        printToConsole('Final Match:', 1);
         const resultFinal = this.final[0].startMatch(this.final[1]);
 
         if (resultFinal.toString() === this.final[0].name) {
@@ -457,7 +437,7 @@ class Draw {
             this.secondPlaced = this.final[0];
         }
 
-        console.log(`\nMedals:\n1. Gold - ${this.firstPlaced.name} (${this.firstPlaced.code})\n2. Silver - ${this.secondPlaced.name} (${this.secondPlaced.code})\n3. Bronze - ${this.thirdPlaced.name} (${this.thirdPlaced.code})`);
+        printToConsole(`\nMedals:\n1. Gold - ${this.firstPlaced.name} (${this.firstPlaced.code})\n2. Silver - ${this.secondPlaced.name} (${this.secondPlaced.code})\n3. Bronze - ${this.thirdPlaced.name} (${this.thirdPlaced.code})`);
     }
 
     // Sort teams by points and handle ties by comparing points scored
@@ -510,7 +490,7 @@ const groups = [];
 /**
  * Reads team data from a JSON file and initializes Group and Team objects.
  */
-async function getTeams() {
+async function loadTeamsFromFile() {
     const filePath = './groups.json';
 
     try {
@@ -527,24 +507,8 @@ async function getTeams() {
             });
         }
     } catch (err) {
-        console.log("Unable to parse JSON " + err);
+        printToConsole("Unable to parse JSON " + err);
     }
-}
-
-function getExibitions() {
-    filePath = './exibitions.json';
-
-    fs.readFile(filePath, 'utf-8', (err, data) => {
-        if (err) {
-            return console.log("Unable to read file " + err);
-        }
-
-        try {
-            const jsonData = JSON.parse(data);
-        } catch (err) {
-            console.log("Unable to parse JSON " + err);
-        }
-    });
 }
 
 // Calculates the probability of winning based on team ranks using the Elo rating system formula.
@@ -558,13 +522,32 @@ function getRandomScoreNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Prints various formatted outputs to the console based on the provided parameters.
+function printToConsole(par = false, newLine = false, deviderSmall = false, deviderBig = false) {
+    if (newLine) {
+        console.log('\n');
+    }
+
+    if (deviderSmall) {
+        console.log('--------------------------------------------------------');
+    }
+
+    if (deviderBig) {
+        console.log('========================================================');
+    }
+
+    if (par) {
+        console.log(par);
+    }
+}
+
 // Main function to initialize the tournament, process matches, and start the draw schema.
 async function start() {
     // Array to hold the results of each group
     const groupResults = [];
 
     // Get team data and initialize Group and Team objects
-    await getTeams();
+    await loadTeamsFromFile();
 
      // Process each group: start matches and set scores for teams
     groups.forEach(group => {
@@ -574,21 +557,20 @@ async function start() {
 
     // Collect final group statistics
     groups.forEach(g => {
-        console.log('\n');
+        printToConsole(0, 1);
         groupResults.push(g.getFinalGroupStats());
     })
 
-    console.log('\n');
+    console.log(0, 1);
 
     // Initialize the Draw class with groups and group results
     const draws = new Draw(groups, groupResults);
 
-    // Create the draw and start the schema for the tournament
-    draws.creatDraw();
+    // create the draw and start the schema for the tournament
+    draws.createDraw();
     draws.startSchema();
-
 }
 // ____________________________________________________________________Function calling________________________________________________________________
 
-// Start the programm
+// Start the program
 start();
