@@ -523,16 +523,16 @@ function getRandomScoreNumber(min, max) {
 }
 
 // Prints various formatted outputs to the console based on the provided parameters.
-function printToConsole(par = false, newLine = false, deviderSmall = false, deviderBig = false) {
+function printToConsole(par = false, newLine = false, dividerSmall = false, dividerBig = false) {
     if (newLine) {
         console.log('\n');
     }
 
-    if (deviderSmall) {
+    if (dividerSmall) {
         console.log('--------------------------------------------------------');
     }
 
-    if (deviderBig) {
+    if (dividerBig) {
         console.log('========================================================');
     }
 
